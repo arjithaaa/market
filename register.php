@@ -20,8 +20,22 @@
   </head>
   <body>
     <div class="container p-5 bg-light d-flex justify-content-around width">
+      <!-- new user registration -->
       <div class="register d-flex flex-column justify-content-center">
         <form>
+          <?php if ($errors > 0): ?>
+            <div class="alert alert-dark">
+              <ul>
+                <?php foreach ($errors as $error): ?>
+                  <li>
+                    <?php echo $error; ?>
+                  </li>
+                <?php
+        endforeach ?>
+              </ul>
+            </div>
+            <?php
+    endif ?>
           <div class="form-group">
             <label for="email">Email address</label>
             <input type="email" class="form-control" id="email" placeholder="Enter email">
@@ -31,31 +45,55 @@
             <input type="text" class="form-control" id="username" placeholder="Enter username">
           </div>
           <div class="form-group">
-            <label for="pwd">Password</label>
-            <input type="password" class="form-control" id="pwd" placeholder="Password">
+            <label for="password">Password</label>
+            <input type="password" class="form-control" id="password" placeholder="Password">
           </div>
           <div class="form-group">
-            <label for="conpwd">Confirm Password</label>
-            <input type="password" class="form-control" id="conpwd" placeholder="Confirm password">
-          </div>
-          <button type="submit" class="btn btn-dark w-50">Submit</button><br>
-          <a href="#">Already a user? Login.</a>
-        </form>
-      </div>
-      <div class="login d-flex flex-column justify-content-center">
-        <form>
-          <div class="form-group">
-            <label for="username">Username</label>
-            <input type="text" class="form-control" id="username" placeholder="Enter username">
+            <label for="confirm">Confirm Password</label>
+            <input type="password" class="form-control" id="confirm" placeholder="Confirm password">
           </div>
           <div class="form-group">
-            <label for="pwd">Password</label>
-            <input type="password" class="form-control" id="pwd" placeholder="Password">
+            <label for="type">Choose profile type</label>
+            <input type="radio" id="seller" name="type" value="seller">
+            <label for="seller">Seller</label><br>
+            <input type="radio" id="buyer" name="type" value="buyer">
+            <label for="buyer">Buyer</label><br>
           </div>
-          <button type="submit" class="btn btn-dark w-50">Submit</button><br>
-          <a href="#">Not a user? Register.</a>
+          <button type="submit" name="signup-btn" class="btn btn-dark w-50">Submit</button><br>
         </form>
       </div>
     </div>
+    <!-- login top bar -->
+    <nav class = "navbar navbar-expand-sm bg-light">
+      <a href="intro.php" class="navbar-brand mr-auto ml-3 text-dark" style="font-size: 1.5rem; font-weight: bold;">KartMart</a>
+      <ul class="navbar-nav ml-auto" style="font-size: 1.25rem;">
+        <li class="nav-item">
+          <?php if ($errors > 0): ?>
+            <div class="alert alert-dark">
+              <ul>
+                <?php foreach ($errors as $error): ?>
+                  <li>
+                    <?php echo $error; ?>
+                  </li>
+                <?php
+        endforeach ?>
+              </ul>
+            </div>
+            <?php
+    endif ?>
+          <form action="intro.php">
+            <div style="display: inline-block; font-size: 1rem;">
+              <label for="username">Username</label>
+              <input type="text" class="form-control" id="username" placeholder="Enter username">
+            </div>
+            <div style="display: inline-block; font-size: 1rem;">
+              <label for="pwd">Password</label>
+              <input type="password" class="form-control" id="pwd" placeholder="Password">
+            </div>
+            <button type="submit" class="btn btn-dark btn-sm" name="login-btn">Sign in</button><br>
+          </form>
+        </li>
+      </ul>
+    </nav>
   </body>
 </html>
