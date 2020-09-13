@@ -23,10 +23,10 @@ else if($_SESSION['type'] != "seller")header("location: intro.php");
   </head>
   <body>
     <nav class = "navbar navbar-expand-sm bg-light">
-      <a href="seller.php" class="navbar-brand mr-auto ml-3 text-dark" style="font-size: 1.5rem; font-weight: bold;">KartMart</a>
+      <a href="seller.php?dashboard=1" class="navbar-brand mr-auto ml-3 text-dark" style="font-size: 1.5rem; font-weight: bold;">KartMart</a>
       <ul class="navbar-nav ml-auto" style="font-size: 1.25rem;">
         <li class="nav-item mr-4 ml-4">
-          <a class="text-dark" href="seller.php" style="text-decoration: none;">Dashboard</a>
+          <a class="text-dark" href="seller.php?dashboard=1" style="text-decoration: none;">Dashboard</a>
         </li>
         <li class="nav-item mr-4 ml-4 text-dark">
           <a class="text-dark" href="newitem.php" style="text-decoration: none;">Add new item</a>
@@ -41,7 +41,7 @@ else if($_SESSION['type'] != "seller")header("location: intro.php");
     </nav>
     <div class="container bg p-5 mt-5">
       <div class="d-flex flex-column justify-content-center w-100">
-        <form action="newitem.php" method="post">
+        <form action="newitem.php" method="post" enctype="multipart/form-data">
           <?php if (count($errors_item) > 0): ?>
             <div class="alert alert-dark">
               <ul>
@@ -59,23 +59,22 @@ else if($_SESSION['type'] != "seller")header("location: intro.php");
     <div class="alert alert-dark">
       <p>Item added</p>
     </div>
-    <?php unset($_SESSION['added']); ?>
   <?php endif ?>
           <div class="form-group">
             <label for="name">Title</label>
-            <input type="text" class="form-control" name="name" placeholder="Enter product name" value = "<?php echo $name ?>">
+            <input type="text" class="form-control" name="name" placeholder="Enter product name" value = "<?php if(!isset($_SESSION['added']))echo $name ?>">
           </div>
           <div class="form-group">
             <label for="description">Description</label>
-            <input type="text" class="form-control" name="description" placeholder="Enter product description" value = "<?php echo $description ?>">
+            <input type="text" class="form-control" name="description" placeholder="Enter product description" value = "<?php if(!isset($_SESSION['added']))echo $description ?>">
           </div>
           <div class="form-group">
             <label for="price">Price</label>
-            <input type="number" class="form-control" name="price" placeholder="Enter price per item" value = "<?php echo $price ?>">
+            <input type="number" class="form-control" name="price" placeholder="Enter price per item" value = "<?php if(!isset($_SESSION['added']))echo $price ?>">
           </div>
           <div class="form-group">
             <label for="quantity">Quantity</label>
-            <input type="number" class="form-control" name="quantity" placeholder="Enter quantity" value = "<?php echo $quantity ?>">
+            <input type="number" class="form-control" name="quantity" placeholder="Enter quantity" value = "<?php if(!isset($_SESSION['added']))echo $quantity ?>">
           </div>
           <div class="form-group">
             <label for="image">Upload image</label>

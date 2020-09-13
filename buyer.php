@@ -20,15 +20,13 @@ else if($_SESSION['type'] != "buyer")header("location: intro.php");
     nav{
       margin-bottom: 5%;
     }
-    .choice{
-      display: inline-block;
-      padding: 1%;
-      border-radius: 10%;
+    .arrange{
+      display: flex;
+      flex-wrap: wrap;
     }
-    .choice:hover{
-      cursor: pointer;
-      color: grey;
-      background-color: #eeeeee;
+    .arr-item{
+      flex-basis: 33.333333%;
+      padding: 2%;
     }
     </style>
   </head>
@@ -37,84 +35,71 @@ else if($_SESSION['type'] != "buyer")header("location: intro.php");
       <a href="intro.php" class="navbar-brand mr-auto ml-3 text-dark" style="font-size: 1.5rem; font-weight: bold;">KartMart</a>
       <ul class="navbar-nav ml-auto" style="font-size: 1.25rem;">
         <li class="nav-item mr-4 ml-4">
-          <a class="text-dark" href="buyer.php" style="text-decoration: none;">Dashboard</a>
+          <a class="text-dark" href="buyer.php?home=1" style="text-decoration: none;">Dashboard</a>
         </li>
         <li class="nav-item mr-4 ml-4 text-dark">
-          <a class="text-dark" href="" style="text-decoration: none;">Shop now</a>
+          <a class="text-dark" href="#shop" style="text-decoration: none;">Shop now</a>
         </li>
         <li class="nav-item mr-4 ml-4 text-dark">
-          <a class="text-dark" href="#" style="text-decoration: none;">Your cart</a>
+          <a class="text-dark" href="cart.php?view=1" style="text-decoration: none;">Your cart</a>
         </li>
         <li class="nav-item mr-4 ml-4 text-dark">
-          <a class="text-dark" href="#" style="text-decoration: none;">Purchase history</a>
+          <a class="text-dark" href="#purchased" style="text-decoration: none;">Purchase history</a>
         </li>
         <li class="nav-item mr-4 ml-4 text-dark">
           <a class="btn btn-outline-dark btn-sm mr-4" href="intro.php?logout=1" role="button">Logout</a>
         </li>
       </ul>
     </nav>
-    <div class="container bg-light p-5" id="recent">
-      <h2 class="text-dark mr-4" style="display:inline-block;">Recently purchased</h2>
-      <p class="choice">See all</p>
-      <br>
-      <div class="container d-flex flex-direction-column justify-content-around">
-        <div class="card col-3" style="width: 18rem;">
-          <img src="..." class="card-img-top" alt="...">
-          <div class="card-body">
-            <h5 class="card-title">Card title</h5>
-            <p class="card-text">Some quick example text to build on the card title and make up the bulk of the card's content.</p>
-            <a href="#" class="btn btn-dark">Go somewhere</a>
-          </div>
-        </div>
-        <div class="card col-3" style="width: 18rem;">
-          <img src="..." class="card-img-top" alt="...">
-          <div class="card-body">
-            <h5 class="card-title">Card title</h5>
-            <p class="card-text">Some quick example text to build on the card title and make up the bulk of the card's content.</p>
-            <a href="#" class="btn btn-dark">Go somewhere</a>
-          </div>
-        </div>
-        <div class="card col-3" style="width: 18rem;">
-          <img src="..." class="card-img-top" alt="...">
-          <div class="card-body">
-            <h5 class="card-title">Card title</h5>
-            <p class="card-text">Some quick example text to build on the card title and make up the bulk of the card's content.</p>
-            <a href="#" class="btn btn-dark">Go somewhere</a>
-          </div>
-        </div>
-      </div>
+    <div class="container p-3" id="purchased">
+      <h2>Purchased By You</h2>
     </div>
 
-    <div class="container bg-light p-5 mt-5" id="shop">
-      <h2 class="text-dark mr-4" style="display:inline-block;">Shop now</h2>
-      <p class="choice">See all</p>
-      <br>
-      <div class="container d-flex flex-direction-column justify-content-around">
-        <div class="card col-3" style="width: 18rem;">
-          <img src="..." class="card-img-top" alt="...">
-          <div class="card-body">
-            <h5 class="card-title">Card title</h5>
-            <p class="card-text">Some quick example text to build on the card title and make up the bulk of the card's content.</p>
-            <a href="#" class="btn btn-dark">Go somewhere</a>
-          </div>
-        </div>
-        <div class="card col-3" style="width: 18rem;">
-          <img src="..." class="card-img-top" alt="...">
-          <div class="card-body">
-            <h5 class="card-title">Card title</h5>
-            <p class="card-text">Some quick example text to build on the card title and make up the bulk of the card's content.</p>
-            <a href="#" class="btn btn-dark">Go somewhere</a>
-          </div>
-        </div>
-        <div class="card col-3" style="width: 18rem;">
-          <img src="..." class="card-img-top" alt="...">
-          <div class="card-body">
-            <h5 class="card-title">Card title</h5>
-            <p class="card-text">Some quick example text to build on the card title and make up the bulk of the card's content.</p>
-            <a href="#" class="btn btn-dark">Go somewhere</a>
-          </div>
-        </div>
-      </div>
+    <div class="container arrange bg-light p-5" id="recent">
+      <?php if($result_pur!="")
+        while ($view_pur = mysqli_fetch_assoc($result_pur)){
+          echo "<div class='arr-item'>
+            <div class='card h-75'>
+              <img src='...' class='card-img-top' alt='...'>
+              <div class='card-body'>
+                <h5 class='card-title'>{$view_pur['name']}</h5>
+                <p class='card-text'>{$view_pur['description']}<br>Price: {$view_pur['price']} Rs<br>Quantity: {$view_pur['quantity']}</p>
+
+              </div>
+            </div>
+          </div>";
+        }?>
+    </div>
+
+    <div class="container p-3" id="shop">
+      <h2>Shop now</h2>
+    </div>
+
+    <div class="container arrange bg-light p-5" id="recent">
+      <?php if($result_shop!="")
+        while ($view_pur = mysqli_fetch_assoc($result_shop)){
+          echo "<div class='arr-item'>
+            <div class='card h-75'>
+              <img src='...' class='card-img-top' alt='...'>
+              <div class='card-body'>
+                <h5 class='card-title'>{$view_pur['name']}</h5>
+                <p class='card-text'>{$view_pur['description']}<br>Price: {$view_pur['price']} Rs<br>Quantity: {$view_pur['quantity']}</p>
+                <form method='post' action='buyer.php?home=1&item_buy={$view_pur['item_id']}'>
+                  <label for='qty'>Select quantity: </label>
+                  <select id='qty' name='qty'>";
+
+                    for($i = 1; $i<=$view_pur['quantity'];$i = $i + 1){
+                      echo "<option value='{$i}'>{$i}</option>";
+                    }
+                    echo
+                  "</select>
+                  <button type='submit' class='btn btn-dark' name='cart-btn'>Add to cart</button>
+                </form>
+
+              </div>
+            </div>
+          </div>";
+        }?>
     </div>
   </body>
 </html>

@@ -20,24 +20,22 @@ else if($_SESSION['type'] != "seller")header("location: intro.php");
     nav{
       margin-bottom: 5%;
     }
-    .choice{
-      display: inline-block;
-      padding: 1%;
-      border-radius: 10%;
+    .arrange{
+      display: flex;
+      flex-wrap: wrap;
     }
-    .choice:hover{
-      cursor: pointer;
-      color: grey;
-      background-color: #eeeeee;
+    .arr-item{
+      flex-basis: 33.333333%;
+      padding: 2%;
     }
     </style>
   </head>
   <body>
     <nav class = "navbar navbar-expand-sm bg-light">
-      <a href="seller.php" class="navbar-brand mr-auto ml-3 text-dark" style="font-size: 1.5rem; font-weight: bold;">KartMart</a>
+      <a href="seller.php?dashboard=1" class="navbar-brand mr-auto ml-3 text-dark" style="font-size: 1.5rem; font-weight: bold;">KartMart</a>
       <ul class="navbar-nav ml-auto" style="font-size: 1.25rem;">
         <li class="nav-item mr-4 ml-4">
-          <a class="text-dark" href="seller.php" style="text-decoration: none;">Dashboard</a>
+          <a class="text-dark" href="seller.php?dashboard=1.php" style="text-decoration: none;">Dashboard</a>
         </li>
         <li class="nav-item mr-4 ml-4 text-dark">
           <a class="text-dark" href="newitem.php" style="text-decoration: none;">Add new item</a>
@@ -50,84 +48,25 @@ else if($_SESSION['type'] != "seller")header("location: intro.php");
         </li>
       </ul>
     </nav>
-    <div class="container bg-light p-5" id="recent">
-      <h2 class="text-dark mr-4">Added by you</h2>
-      <br>
-
-      <div class="d-flex">
-        <div class="col-4">
-          <div class="card">
-            <img src="..." class="card-img-top" alt="...">
-            <div class="card-body">
-              <h5 class="card-title"><?php echo item['description'] ?></h5>
-              <p class="card-text">Some quick example text to build on the card title and make up the bulk of the card's content.</p>
-              <a href="#" class="btn btn-dark">Go somewhere</a>
-            </div>
-          </div>
-        </div>
-        <!-- <div class="col-4">
-          <div class="card">
-            <img src="..." class="card-img-top" alt="...">
-            <div class="card-body">
-              <h5 class="card-title">Card title</h5>
-              <p class="card-text">Some quick example text to build on the card title and make up the bulk of the card's content.</p>
-              <a href="#" class="btn btn-dark">Go somewhere</a>
-            </div>
-          </div>
-        </div>
-        <div class="col-4">
-          <div class="card">
-            <img src="..." class="card-img-top" alt="...">
-            <div class="card-body">
-              <h5 class="card-title">Card title</h5>
-              <p class="card-text">Some quick example text to build on the card title and make up the bulk of the card's content.</p>
-              <a href="#" class="btn btn-dark">Go somewhere</a>
-            </div>
-          </div>
-        </div>
-        <div class="col-4">
-          <div class="card">
-            <img src="..." class="card-img-top" alt="...">
-            <div class="card-body">
-              <h5 class="card-title">Card title</h5>
-              <p class="card-text">Some quick example text to build on the card title and make up the bulk of the card's content.</p>
-              <a href="#" class="btn btn-dark">Go somewhere</a>
-            </div>
-          </div>
-        </div> -->
-      </div>
-
-
-      <!-- <div class="container d-flex flex-direction-column justify-content-around">
-        <div class="card">
-          <img src="..." class="card-img-top" alt="...">
-          <div class="card-body">
-            <h5 class="card-title">Card title</h5>
-            <p class="card-text">Some quick example text to build on the card title and make up the bulk of the card's content.</p>
-            <a href="#" class="btn btn-dark">Go somewhere</a>
-          </div>
-        </div>
-        <div class="card col-3" style="width: 18rem;">
-          <img src="..." class="card-img-top" alt="...">
-          <div class="card-body">
-            <h5 class="card-title">Card title</h5>
-            <p class="card-text">Some quick example text to build on the card title and make up the bulk of the card's content.</p>
-            <a href="#" class="btn btn-dark">Go somewhere</a>
-          </div>
-        </div>
-        <div class="card col-3" style="width: 18rem;">
-          <img src="..." class="card-img-top" alt="...">
-          <div class="card-body">
-            <h5 class="card-title">Card title</h5>
-            <p class="card-text">Some quick example text to build on the card title and make up the bulk of the card's content.</p>
-            <a href="#" class="btn btn-dark">Go somewhere</a>
-          </div>
-        </div>
-      </div> -->
-
+    <div class="container p-3">
+      <h2>Added By You</h2>
     </div>
 
-
-
+    <div class="container arrange bg-light p-5" id="recent">
+      <?php if($result_added!="")
+        while ($view_added = mysqli_fetch_assoc($result_added)){
+          echo "<div class='arr-item'>
+            <div class='card h-75'>
+              <img src='...' class='card-img-top' alt='...'>
+              <div class='card-body'>
+                <h5 class='card-title'>{$view_added['name']}</h5>
+                <p class='card-text'>{$view_added['description']}<br>Price: {$view_added['price']} Rs<br>Quantity: {$view_added['quantity']}</p>
+                <a href='edit.php?item={$view_added['item_id']}' class='btn btn-dark'>Edit</a>
+              </div>
+            </div>
+          </div>";
+        }?>
+      </div>
+</div>
   </body>
 </html>
