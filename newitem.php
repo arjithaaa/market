@@ -1,3 +1,8 @@
+<?php
+include ("server.php");
+if(!isset($_SESSION['id'])){header("location: intro.php"); exit();}
+else if($_SESSION['type'] != "seller")header("location: intro.php");
+?>
 <!DOCTYPE html>
 <html lang="en" dir="ltr">
   <head>
@@ -11,33 +16,36 @@
     body{
       background-color: #fff;
     }
+    .bg{
+      background-color: #eeeeee;
+    }
     </style>
   </head>
   <body>
     <nav class = "navbar navbar-expand-sm bg-light">
-      <a href="intro.php" class="navbar-brand mr-auto ml-3 text-dark" style="font-size: 1.5rem; font-weight: bold;">KartMart</a>
+      <a href="seller.php" class="navbar-brand mr-auto ml-3 text-dark" style="font-size: 1.5rem; font-weight: bold;">KartMart</a>
       <ul class="navbar-nav ml-auto" style="font-size: 1.25rem;">
-        <li class="nav-item">
-          <a href="seller.php">Dashboard</a>
+        <li class="nav-item mr-4 ml-4">
+          <a class="text-dark" href="seller.php" style="text-decoration: none;">Dashboard</a>
         </li>
-        <li class="nav-item">
-          <a href="">Add new</a>
+        <li class="nav-item mr-4 ml-4 text-dark">
+          <a class="text-dark" href="newitem.php" style="text-decoration: none;">Add new item</a>
         </li>
-        <li class="nav-item">
-          <a href="#">Your cart</a>
+        <li class="nav-item mr-4 ml-4 text-dark">
+          <a class="text-dark" href="#" style="text-decoration: none;">Purchase history</a>
         </li>
-        <li class="nav-item">
-          <a href="#">Sale history</a>
+        <li class="nav-item mr-4 ml-4 text-dark">
+          <a class="btn btn-outline-dark btn-sm mr-4" href="intro.php?logout=1" role="button">Logout</a>
         </li>
       </ul>
     </nav>
-    <div class="container">
-      <div class="register d-flex flex-column justify-content-center">
-        <form>
-          <?php if ($errors > 0): ?>
+    <div class="container bg p-5 mt-5">
+      <div class="d-flex flex-column justify-content-center w-100">
+        <form action="newitem.php" method="post">
+          <?php if (count($errors_item) > 0): ?>
             <div class="alert alert-dark">
               <ul>
-                <?php foreach ($errors as $error): ?>
+                <?php foreach ($errors_item as $error): ?>
                   <li>
                     <?php echo $error; ?>
                   </li>
@@ -47,27 +55,33 @@
             </div>
             <?php
     endif ?>
+    <?php if(isset($_SESSION['added'])): ?>
+    <div class="alert alert-dark">
+      <p>Item added</p>
+    </div>
+    <?php unset($_SESSION['added']); ?>
+  <?php endif ?>
           <div class="form-group">
-            <label for="title">Title</label>
-            <input type="text" class="form-control" id="title" placeholder="Enter product title">
+            <label for="name">Title</label>
+            <input type="text" class="form-control" name="name" placeholder="Enter product name" value = "<?php echo $name ?>">
           </div>
           <div class="form-group">
             <label for="description">Description</label>
-            <input type="text" class="form-control" id="description" placeholder="Enter product description">
+            <input type="text" class="form-control" name="description" placeholder="Enter product description" value = "<?php echo $description ?>">
           </div>
           <div class="form-group">
             <label for="price">Price</label>
-            <input type="number" class="form-control" id="price" placeholder="Enter price per item">
+            <input type="number" class="form-control" name="price" placeholder="Enter price per item" value = "<?php echo $price ?>">
           </div>
           <div class="form-group">
             <label for="quantity">Quantity</label>
-            <input type="number" class="form-control" id="quantity" placeholder="Enter quantity">
+            <input type="number" class="form-control" name="quantity" placeholder="Enter quantity" value = "<?php echo $quantity ?>">
           </div>
           <div class="form-group">
-            <label for="pic">Upload image</label>
-            <input type="file" class="form-control" id="pic">
+            <label for="image">Upload image</label>
+            <input type="file" class="form-control pb-5 pt-3" name="image">
           </div>
-          <button type="submit" name="newitem-btn" class="btn btn-dark w-50">Add new item</button><br>
+          <button type="submit" name="newitem-btn" class="btn btn-dark w-100">Add new item</button><br>
         </form>
       </div>
     </div>

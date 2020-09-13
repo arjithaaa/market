@@ -1,3 +1,4 @@
+<?php include ("server.php") ?>
 <!DOCTYPE html>
 <html lang="en" dir="ltr">
   <head>
@@ -10,7 +11,7 @@
     <style>
     body{
       background-color: #292b2c;
-      padding: 5% 0;
+      margin-bottom: 3%;
     }
 
     .width{
@@ -19,81 +20,86 @@
     </style>
   </head>
   <body>
-    <div class="container p-5 bg-light d-flex justify-content-around width">
-      <!-- new user registration -->
-      <div class="register d-flex flex-column justify-content-center">
-        <form>
-          <?php if ($errors > 0): ?>
-            <div class="alert alert-dark">
-              <ul>
-                <?php foreach ($errors as $error): ?>
-                  <li>
-                    <?php echo $error; ?>
-                  </li>
-                <?php
-        endforeach ?>
-              </ul>
-            </div>
-            <?php
-    endif ?>
-          <div class="form-group">
-            <label for="email">Email address</label>
-            <input type="email" class="form-control" id="email" placeholder="Enter email">
-          </div>
-          <div class="form-group">
-            <label for="username">Username</label>
-            <input type="text" class="form-control" id="username" placeholder="Enter username">
-          </div>
-          <div class="form-group">
-            <label for="password">Password</label>
-            <input type="password" class="form-control" id="password" placeholder="Password">
-          </div>
-          <div class="form-group">
-            <label for="confirm">Confirm Password</label>
-            <input type="password" class="form-control" id="confirm" placeholder="Confirm password">
-          </div>
-          <div class="form-group">
-            <label for="type">Choose profile type</label>
-            <input type="radio" id="seller" name="type" value="seller">
-            <label for="seller">Seller</label><br>
-            <input type="radio" id="buyer" name="type" value="buyer">
-            <label for="buyer">Buyer</label><br>
-          </div>
-          <button type="submit" name="signup-btn" class="btn btn-dark w-50">Submit</button><br>
-        </form>
-      </div>
-    </div>
     <!-- login top bar -->
-    <nav class = "navbar navbar-expand-sm bg-light">
+    <nav class = "navbar navbar-expand-sm bg-light mb-5 pb-3">
       <a href="intro.php" class="navbar-brand mr-auto ml-3 text-dark" style="font-size: 1.5rem; font-weight: bold;">KartMart</a>
+      <?php if (count($errors_log) > 0): ?>
+        <div class="ml-auto alert alert-dark d-flex pl-0 pt-2 pr-2 pb-0">
+          <ul>
+            <?php foreach ($errors_log as $error): ?>
+              <li>
+                <?php echo $error; ?>
+              </li>
+            <?php endforeach ?>
+          </ul>
+        </div>
+      <?php endif ?>
+
       <ul class="navbar-nav ml-auto" style="font-size: 1.25rem;">
         <li class="nav-item">
-          <?php if ($errors > 0): ?>
-            <div class="alert alert-dark">
-              <ul>
-                <?php foreach ($errors as $error): ?>
-                  <li>
-                    <?php echo $error; ?>
-                  </li>
-                <?php
-        endforeach ?>
-              </ul>
-            </div>
-            <?php
-    endif ?>
-          <form action="intro.php">
+          <form action="register.php" method="post">
             <div style="display: inline-block; font-size: 1rem;">
               <label for="username">Username</label>
-              <input type="text" class="form-control" id="username" placeholder="Enter username">
+              <input type="text" class="form-control"  name="username" placeholder="Enter username" value="<?php echo $username_log ?>">
             </div>
             <div style="display: inline-block; font-size: 1rem;">
               <label for="pwd">Password</label>
-              <input type="password" class="form-control" id="pwd" placeholder="Password">
+              <input type="password" class="form-control" name="password" placeholder="Password" value="<?php echo $password_log ?>">
             </div>
             <button type="submit" class="btn btn-dark btn-sm" name="login-btn">Sign in</button><br>
           </form>
         </li>
       </ul>
     </nav>
+
+    <div class="container p-5 bg-light d-flex justify-content-center width m-auto">
+      <!-- new user registration -->
+      <div class="register d-flex flex-column justify-content-center w-100">
+        <form action="register.php" method="post">
+          <?php if (count($errors_reg) > 0): ?>
+            <div class="ml-auto alert alert-dark d-flex">
+              <ul>
+                <?php foreach ($errors_reg as $error): ?>
+                  <li>
+                    <?php echo $error; ?>
+                  </li>
+                <?php endforeach ?>
+              </ul>
+            </div>
+          <?php endif ?>
+
+          <div class="form-group">
+            <label for="email">Email address</label>
+            <input type="email" class="form-control" name="email" placeholder="Enter email" value="<?php echo $email ?>">
+          </div>
+          <div class="form-group">
+            <label for="username">Username</label>
+            <input type="text" class="form-control" name="username" placeholder="Enter username" value="<?php echo $username_reg ?>">
+          </div>
+          <div class="form-group">
+            <label for="password">Password</label>
+            <input type="password" class="form-control" name="password" placeholder="Password" value="<?php echo $password_reg ?>">
+          </div>
+          <div class="form-group">
+            <label for="confirm">Confirm Password</label>
+            <input type="password" class="form-control" name="confirm" placeholder="Confirm password" value="<?php echo $confirm ?>">
+          </div>
+          <div class="form-group d-flex flex-direction-column">
+            <label for="type">Choose profile type</label>
+            <div class="ml-auto d-flex flex-direction-column justify-content-around">
+              <div class="">
+                <input type="radio" id="seller" name="type" value="seller">
+                <label for="seller" class="mr-5">Seller</label><br>
+              </div>
+              <div class="">
+                <input type="radio" id="buyer" name="type" value="buyer">
+                <label for="buyer" class="mr-5">Buyer</label><br>
+              </div>
+            </div>
+          </div>
+          <button type="submit" name="signup-btn" class="btn btn-dark w-100">Sign up</button><br>
+        </form>
+      </div>
+    </div>
   </body>
 </html>
