@@ -51,7 +51,7 @@ else if($_SESSION['type'] != "buyer")header("location: intro.php");
           <a class="text-dark" href="buyer.php?home=1#shop" style="text-decoration: none;">Shop now</a>
         </li>
         <li class="nav-item mr-4 ml-4 text-dark">
-          <a class="text-dark" href="cart.php?" style="text-decoration: none;">Your cart</a>
+          <a class="text-dark" href="cart.php?view=1" style="text-decoration: none;">Your cart</a>
         </li>
         <li class="nav-item mr-4 ml-4 text-dark">
           <a class="text-dark" href="buyer.php?home=1#purchased" style="text-decoration: none;">Purchase history</a>
@@ -67,19 +67,37 @@ else if($_SESSION['type'] != "buyer")header("location: intro.php");
     </div>
 
     <div class="container arrange bg-light p-5" id="recent">
-      <?php if($result_cart!="")
-        while ($view_cart = mysqli_fetch_assoc($result_cart)){
-          echo "<div class='arr-item'>
-            <div class='card h-75'>
-              <img src='...' class='card-img-top' alt='...'>
-              <div class='card-body'>
-                <h5 class='card-title'>{$view_cart['name']}</h5>
-                <p class='card-text'>{$view_cart['description']}<br>Price: {$view_cart['price']} Rs<br>Quantity: {$view_pur['quantity']}</p>
-                <a href='cart.php?view=1&remove=1&item_id={$view_cart['item_id']}' class='btn btn-dark'>Remove</a>
+      <?php $i = 0;
+      while($all_items = mysqli_fetch_assoc($result_cart)){
+        $no = $all_items['item_id'];
+        $q = $all_items['qty'];
+        $query = "SELECT * FROM item WHERE item_id = ?;";
+        $stmt = mysqli_stmt_init($db);
+        if (!mysqli_stmt_prepare($stmt, $query))
+        {
+            echo "FAILED here1";
+        }
+        else
+        {
+            mysqli_stmt_bind_param($stmt, "i", $no);
+            mysqli_stmt_execute($stmt);
+            $result = mysqli_stmt_get_result($stmt);
+            $view_cart = mysqli_fetch_assoc($result);
+            echo "<div class='arr-item'>
+              <div class='card h-75'>
+                <img src='...' class='card-img-top' alt='...'>
+                <div class='card-body'>
+                  <h5 class='card-title'>{$view_cart['name']}</h5>
+                  <p class='card-text'>{$view_cart['description']}<br>Price: {$view_cart['price']} Rs<br>Quantity: {$q}</p>
+                  <a href='cart.php?view=1&remove=1&item_id={$view_cart['item_id']}' class='btn btn-dark'>Remove</a>
+                </div>
               </div>
-            </div>
-          </div>";
-        }?>
+            </div>";
+            $i=1;
+        }
+      }
+        if($i == 0)echo "<p class='text-dark'>You have not added any items yet!</p>";
+        ?>
     </div>
   </body>
 </html>

@@ -53,7 +53,8 @@ else if($_SESSION['type'] != "seller")header("location: intro.php");
     </div>
 
     <div class="container arrange bg-light p-5" id="recent">
-      <?php if($result_added!="")
+      <?php
+      { $i = 0;
         while ($view_added = mysqli_fetch_assoc($result_added)){
           echo "<div class='arr-item'>
             <div class='card h-75'>
@@ -65,7 +66,11 @@ else if($_SESSION['type'] != "seller")header("location: intro.php");
               </div>
             </div>
           </div>";
-        }?>
+          $i = 1;
+        }
+        if($i == 0)echo "<p class='text-dark'>You have not added any items yet!</p>";
+      }
+        ?>
       </div>
 </div>
   </body>

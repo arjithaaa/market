@@ -363,23 +363,7 @@ if (isset($_GET['home'])){
       $p = 1;
       mysqli_stmt_bind_param($stmt, "ii", $_SESSION['id'], $p);
       mysqli_stmt_execute($stmt);
-      $result = mysqli_stmt_get_result($stmt);
-
-      while($all_items = mysqli_fetch_assoc($result)){
-        $no = $all_items['item_id'];
-        $query = "SELECT * FROM item WHERE item_id = ?;";
-        $stmt = mysqli_stmt_init($db);
-        if (!mysqli_stmt_prepare($stmt, $query))
-        {
-            echo "FAILED here1";
-        }
-        else
-        {
-            mysqli_stmt_bind_param($stmt, "i", $no);
-            mysqli_stmt_execute($stmt);
-            $result_pur = mysqli_stmt_get_result($stmt);
-        }
-      }
+      $result_pur = mysqli_stmt_get_result($stmt);
   }
 }
 
@@ -400,6 +384,8 @@ if (isset($_GET['item_buy'])){
       $details = mysqli_fetch_assoc($result);
   }
 }
+
+
 if (isset($_POST['cart-btn'])){
   $qty = $_POST['qty'];
   $query = "INSERT INTO orders (item_id, buyer_id, seller_id, qty, purchased) VALUES (?,?,?,?,?)";
@@ -411,41 +397,15 @@ if (isset($_POST['cart-btn'])){
   else
   {
       $a = 0;
-      mysqli_stmt_bind_param($stmt, "iiiii", $details['item_id'], $_SESSION['id'], $details['seller_id'],$a, $a);
+      mysqli_stmt_bind_param($stmt, "iiiii", $details['item_id'], $_SESSION['id'], $details['seller_id'],$qty, $a);
       mysqli_stmt_execute($stmt);
-
-      $new = $details['quantity'] - $_POST['qty'];
-      $query = "UPDATE item SET quantity=? WHERE item_id=?";
-      $stmt = mysqli_stmt_init($db);
-      if (!mysqli_stmt_prepare($stmt, $query))
-      {
-          echo "FAILED";
-      }
-      else
-      {
-          mysqli_stmt_bind_param($stmt, "ii",$new,$details['item_id']);
-          mysqli_stmt_execute($stmt);
-          header("location: buyer.php?home=1#shop");
-          exit();
-      }
-      $query = "UPDATE orders SET qty=? WHERE item_id=?";
-      $stmt = mysqli_stmt_init($db);
-      if (!mysqli_stmt_prepare($stmt, $query))
-      {
-          echo "FAILED";
-      }
-      else
-      {
-          mysqli_stmt_bind_param($stmt, "iii",$_POST['qty'],$details['item_id'], $a);
-          mysqli_stmt_execute($stmt);
-          header("location: buyer.php?home=1#shop");
-          exit();
-      }
+      header("location: buyer.php?home=1#shop");
   }
 }
 
 //view cart
 $result_cart = "";
+$q;
 if(isset($_GET['view'])){
   $query = "SELECT * FROM orders WHERE buyer_id = ? AND purchased=?;";
   $stmt = mysqli_stmt_init($db);
@@ -458,23 +418,7 @@ if(isset($_GET['view'])){
       $p = 0;
       mysqli_stmt_bind_param($stmt, "ii", $_SESSION['id'], $p);
       mysqli_stmt_execute($stmt);
-      $result = mysqli_stmt_get_result($stmt);
-
-      while($all_items = mysqli_fetch_assoc($result)){
-        $no = $all_items['item_id'];
-        $query = "SELECT * FROM item WHERE item_id = ?;";
-        $stmt = mysqli_stmt_init($db);
-        if (!mysqli_stmt_prepare($stmt, $query))
-        {
-            echo "FAILED here1";
-        }
-        else
-        {
-            mysqli_stmt_bind_param($stmt, "i", $no);
-            mysqli_stmt_execute($stmt);
-            $result_cart = mysqli_stmt_get_result($stmt);
-        }
-      }
+      $result_cart = mysqli_stmt_get_result($stmt);
   }
 }
 
@@ -509,11 +453,57 @@ if(isset($_GET['add'])){
       mysqli_stmt_execute($stmt);
       header("location: cart.php?view=1");
   }
+
+  $query = "SELECT * FROM orders WHERE purchased=?";
+  $stmt = mysqli_stmt_init($db);
+  if (!mysqli_stmt_prepare($stmt, $query))
+  {
+      echo "FAILED";
+  }
+  else
+  {
+      $p = 1;
+      mysqli_stmt_bind_param($stmt, "i",$p);
+      mysqli_stmt_execute($stmt);
+      $result = mysqli_stmt_get_result($stmt);
+      while($items = mysqli_fetch_assoc($result)){
+        $id = $items['item_id'];
+        $q = $items['qty'];
+        $query = "SELECT * FROM item WHERE item_id=?";
+        $stmt = mysqli_stmt_init($db);
+        if (!mysqli_stmt_prepare($stmt, $query))
+        {
+            echo "FAILED";
+        }
+        else
+        {
+            mysqli_stmt_bind_param($stmt, "i",$id);
+            mysqli_stmt_execute($stmt);
+            $r = mysqli_stmt_get_result($stmt);
+            $ass = mysqli_fetch_assoc($r);
+            $quantity = $ass['quantity'];
+
+            $query = "UPDATE item SET quantity=? WHERE item_id=?";
+            $stmt = mysqli_stmt_init($db);
+            if (!mysqli_stmt_prepare($stmt, $query))
+            {
+                echo "FAILED";
+            }
+            else
+            {
+                $new = $quantity - $q;
+                mysqli_stmt_bind_param($stmt, "ii",$new,$id);
+                mysqli_stmt_execute($stmt);
+                header("location: cart.php?view=1");
+                exit();
+            }
+        }
+      }
+  }
 }
 
 //view sold items
-// $result_sold_item = "";
-// $result_sold_buyer = "";
+
 $item_arr = array();
 $name_arr = array();
 $email_arr = array();

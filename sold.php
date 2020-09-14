@@ -66,6 +66,8 @@ else if($_SESSION['type'] != "seller")header("location: intro.php");
             </div>";
           }
       }
+      else echo "<p class='text-dark'>You have not sold any items yet!</p>";
+
 
         ?>
     </div>

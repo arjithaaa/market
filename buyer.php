@@ -38,13 +38,13 @@ else if($_SESSION['type'] != "buyer")header("location: intro.php");
           <a class="text-dark" href="buyer.php?home=1" style="text-decoration: none;">Dashboard</a>
         </li>
         <li class="nav-item mr-4 ml-4 text-dark">
-          <a class="text-dark" href="#shop" style="text-decoration: none;">Shop now</a>
+          <a class="text-dark" href="buyer.php?home=1#shop" style="text-decoration: none;">Shop now</a>
         </li>
         <li class="nav-item mr-4 ml-4 text-dark">
           <a class="text-dark" href="cart.php?view=1" style="text-decoration: none;">Your cart</a>
         </li>
         <li class="nav-item mr-4 ml-4 text-dark">
-          <a class="text-dark" href="#purchased" style="text-decoration: none;">Purchase history</a>
+          <a class="text-dark" href="buyer.php?home=1#purchased" style="text-decoration: none;">Purchase history</a>
         </li>
         <li class="nav-item mr-4 ml-4 text-dark">
           <a class="btn btn-outline-dark btn-sm mr-4" href="intro.php?logout=1" role="button">Logout</a>
@@ -56,19 +56,37 @@ else if($_SESSION['type'] != "buyer")header("location: intro.php");
     </div>
 
     <div class="container arrange bg-light p-5" id="recent">
-      <?php if($result_pur!="")
-        while ($view_pur = mysqli_fetch_assoc($result_pur)){
-          echo "<div class='arr-item'>
-            <div class='card h-75'>
-              <img src='...' class='card-img-top' alt='...'>
-              <div class='card-body'>
-                <h5 class='card-title'>{$view_pur['name']}</h5>
-                <p class='card-text'>{$view_pur['description']}<br>Price: {$view_pur['price']} Rs<br>Quantity: {$view_pur['quantity']}</p>
-
+      <?php
+      $i = 0;
+      while($all_items = mysqli_fetch_assoc($result_pur)){
+        $no = $all_items['item_id'];
+        $q = $all_items['qty'];
+        $query = "SELECT * FROM item WHERE item_id=?;";
+        $stmt = mysqli_stmt_init($db);
+        if (!mysqli_stmt_prepare($stmt, $query))
+        {
+            echo "FAILED here1";
+        }
+        else
+        {
+            mysqli_stmt_bind_param($stmt, "i", $no);
+            mysqli_stmt_execute($stmt);
+            $result = mysqli_stmt_get_result($stmt);
+            $view_pur = mysqli_fetch_assoc($result);
+            echo "<div class='arr-item'>
+              <div class='card h-75'>
+                <img src='...' class='card-img-top' alt='...'>
+                <div class='card-body'>
+                  <h5 class='card-title'>{$view_pur['name']}</h5>
+                  <p class='card-text'>{$view_pur['description']}<br>Price: {$view_pur['price']} Rs<br>Quantity: {$q}</p>
+                </div>
               </div>
-            </div>
-          </div>";
-        }?>
+            </div>";
+            $i = 1;
+        }
+      }
+        if($i == 0)echo "<p class='text-dark'>You have not purchased any items yet!</p>";
+        ?>
     </div>
 
     <div class="container p-3" id="shop">
@@ -76,7 +94,7 @@ else if($_SESSION['type'] != "buyer")header("location: intro.php");
     </div>
 
     <div class="container arrange bg-light p-5" id="recent">
-      <?php if($result_shop!="")
+      <?php $i = 0;
         while ($view_pur = mysqli_fetch_assoc($result_shop)){
           echo "<div class='arr-item'>
             <div class='card h-75'>
@@ -99,7 +117,10 @@ else if($_SESSION['type'] != "buyer")header("location: intro.php");
               </div>
             </div>
           </div>";
-        }?>
+          $i = 1;
+        }
+        if($i == 0)echo "<p class='text-dark'>Sorry, there are no items available!</p>";
+        ?>
     </div>
   </body>
 </html>
