@@ -38,10 +38,10 @@ else if($_SESSION['type'] != "seller")header("location: intro.php");
           <a class="text-dark" href="seller.php?dashboard=1.php" style="text-decoration: none;">Dashboard</a>
         </li>
         <li class="nav-item mr-4 ml-4 text-dark">
-          <a class="text-dark" href="newitem.php" style="text-decoration: none;">Add new item</a>
+          <a class="text-dark" href="newitem.php?unset=1" style="text-decoration: none;">Add new item</a>
         </li>
         <li class="nav-item mr-4 ml-4 text-dark">
-          <a class="text-dark" href="#" style="text-decoration: none;">Sold items</a>
+          <a class="text-dark" href="sold.php?display=1" style="text-decoration: none;">Sold items</a>
         </li>
         <li class="nav-item mr-4 ml-4 text-dark">
           <a class="btn btn-outline-dark btn-sm mr-4" href="intro.php?logout=1" role="button">Logout</a>

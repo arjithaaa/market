@@ -38,7 +38,7 @@ else if($_SESSION['type'] != "seller")header("location: intro.php");
           <a class="text-dark" href="seller.php?dashboard=1.php" style="text-decoration: none;">Dashboard</a>
         </li>
         <li class="nav-item mr-4 ml-4 text-dark">
-          <a class="text-dark" href="newitem.php" style="text-decoration: none;">Add new item</a>
+          <a class="text-dark" href="newitem.php?unset=1" style="text-decoration: none;">Add new item</a>
         </li>
         <li class="nav-item mr-4 ml-4 text-dark">
           <a class="text-dark" href="sold.php?display=1" style="text-decoration: none;">Sold items</a>
@@ -53,19 +53,20 @@ else if($_SESSION['type'] != "seller")header("location: intro.php");
     </div>
 
     <div class="container arrange bg-light p-5" id="recent">
-      <?php if($result_sold_item!=""){
-        while ($view_sold_item = mysqli_fetch_assoc($result_sold_item) && $view_sold_buyer = mysqli_fetch_assoc($result_sold_buyer)){
-          echo "<div class='arr-item'>
-            <div class='card h-75'>
-              <img src='...' class='card-img-top' alt='...'>
-              <div class='card-body'>
-                <h5 class='card-title'>{$view_sold_item['name']}</h5>
-                <p class='card-text'>Customer: {$view_sold_buyer['username']}<br>Email: {$view_sold_buyer['email']} </p>
+      <?php if($flag!=0){
+        for($i=0; $i<count($item_arr); $i = $i + 1){
+            echo "<div class='arr-item'>
+              <div class='card h-75'>
+                <img src='...' class='card-img-top' alt='...'>
+                <div class='card-body'>
+                  <h5 class='card-title'>{$item_arr[$i]}</h5>
+                  <p class='card-text'>Customer: {$name_arr[$i]}<br>Email: {$email_arr[$i]} </p>
+                </div>
               </div>
-            </div>
-          </div>";
-        }
+            </div>";
+          }
       }
+
         ?>
     </div>
   </body>
